@@ -40,12 +40,11 @@ app.post("/send-notification", async (req, res) => {
         body: query.body ?? "This is a test notification.",
         url:"https://pn-front.onrender.com/test",
     });
+    subscriptions.forEach((sub) => {
+        webPush.sendNotification(sub, payload).catch((err) => console.error(err));
+    });
 
-  subscriptions.forEach((sub) => {
-    webPush.sendNotification(sub, payload).catch((err) => console.error(err));
-  });
-
-  res.json({ message: "Push notification sent!" });
+    res.json({ message: "Push notification sent!" });
 });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
