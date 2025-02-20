@@ -16,7 +16,8 @@ const vapidKeys = {
   privateKey: process.env.VAPID_PRIVATE_KEY,
 };
 
-webPush.setVapidDetails("mailto:your-email@example.com", vapidKeys.publicKey, vapidKeys.privateKey);
+webPush.setVapidDetails("mailto:giorgi.maziashvili96@gmail.com", vapidKeys.publicKey, vapidKeys.privateKey);
+// webPush.setVapidDetails("mailto:your-email@example.com", vapidKeys.publicKey, vapidKeys.privateKey);
 
 let subscriptions = [];
 
@@ -33,7 +34,12 @@ app.get('/test',(req,res) => {
 
 // 📌 Send Push Notification
 app.post("/send-notification", async (req, res) => {
-  const payload = JSON.stringify({ title: "Hello!", body: "This is a test notification." });
+    const query = req.query
+    const payload = JSON.stringify({ 
+        title: query.title ?? "Hello!", 
+        body: query.body ?? "This is a test notification.",
+        url:"https://pn-front.onrender.com/test",
+    });
 
   subscriptions.forEach((sub) => {
     webPush.sendNotification(sub, payload).catch((err) => console.error(err));
